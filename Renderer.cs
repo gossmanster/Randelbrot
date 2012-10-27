@@ -43,6 +43,7 @@ namespace Randelbrot
             }
         }
 
+
         private void SetColor(PixelBuffer buffer, Palette palette, int x, int y, int count, int maxCount)
         {
             int color = palette.GetColor(count);
