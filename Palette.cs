@@ -5,37 +5,37 @@ using System.Text;
 
 namespace Randelbrot
 {
-    public class Palette
+    public abstract class Palette
     {
-        public enum Style
-        {
-            Default
-        }
+        protected int[] Colors { get; private set; }
 
-        private Style style;
-        private int[] colors;
+        protected int ColorCount { get; private set; }
+        private Palette() { }
 
-        const int numberColors = 1024;
-        public Palette(Style style)
+        protected Palette(int numberColors)
         {
-            this.colors = new int[numberColors];
-            this.style = style;
-            this.Initialize();
+            this.ColorCount = numberColors;
+            this.Colors = new int[numberColors];
         }
 
         public int GetColor(int count)
         {
-            return this.colors[count % numberColors];
+            return this.Colors[count % this.ColorCount];
         }
+    }
 
-        private void Initialize()
+    public class DefaultPalette : Palette
+    {
+        const int numberColors = 1024;
+        public DefaultPalette()
+            : base(numberColors)
         {
             int color;
             uint red, blue, green;
             for (uint i = 0; i < numberColors; i++)
             {
-                red = i / 4;
-                green = (i % 16) * 16;
+                green = 32 + (i % 220);
+                red = (i % 16) * 16;
                 blue = (i % 64) * 4;
 
                 unchecked
@@ -45,7 +45,7 @@ namespace Randelbrot
                     color |= (byte)(blue & 0xff) << 8;
                     color |= (byte)green;
                 }
-                this.colors[i] = color;
+                this.Colors[i] = color;
             }
         }
 

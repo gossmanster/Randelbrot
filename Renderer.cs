@@ -11,14 +11,13 @@ namespace Randelbrot
         {
             unchecked
             {
-                this.white = (int)0xffffffff;
                 this.black = (int)0xff000000;
             }
         }
 
-        int white, black;
+        int black;
 
-        public void Render(PixelBuffer buffer, MandelbrotSet set, Palette palette, int maxCount)
+        virtual public void Render(PixelBuffer buffer, MandelbrotSet set, BandMap bandMap, Palette palette, int maxCount)
         {
             DoubleComplexNumber center = (DoubleComplexNumber)set.Center;
             DoubleComplexNumber size = (DoubleComplexNumber)set.Side;
@@ -36,7 +35,7 @@ namespace Randelbrot
                 for (int j = 0; j < buffer.SizeY; j++)
                 {
                     int count = temp.CalculateCount(maxCount);
-                    this.SetColor(buffer, palette, i, j, count, maxCount);
+                    this.SetColor(buffer, bandMap, palette, i, j, count, maxCount);
                     temp.Y += gap;
                 }
                 temp.X += gap;
@@ -44,9 +43,10 @@ namespace Randelbrot
         }
 
 
-        private void SetColor(PixelBuffer buffer, Palette palette, int x, int y, int count, int maxCount)
+        private void SetColor(PixelBuffer buffer, BandMap bandMap, Palette palette, int x, int y, int count, int maxCount)
         {
-            int color = palette.GetColor(count);
+            int band = bandMap.Map(count);
+            int color = palette.GetColor(band);
             if (count == maxCount)
                 color = black;
             buffer.SetValue(x, y, color);
