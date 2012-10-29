@@ -7,12 +7,19 @@ namespace Randelbrot
 {
     public class MandelbrotSet
     {
-        public ComplexNumber Center { get; private set; }
-        public ComplexNumber Side { get; private set; }
-        public MandelbrotSet(ComplexNumber center, ComplexNumber side)
+        public DoubleComplexNumber Center { get; private set; }
+        public double Side { get; private set; }
+        public MandelbrotSet(DoubleComplexNumber center, double side)
         {
             this.Center = center;
             this.Side = side;
+        }
+
+        public int EstimateMaxCount()
+        {
+            double temp = Math.Log(1.0 / Side);
+            temp *= temp * 40;
+            return (int)temp + 400;
         }
     }
 }

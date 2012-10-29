@@ -20,9 +20,9 @@ namespace Randelbrot
         virtual public void Render(PixelBuffer buffer, MandelbrotSet set, BandMap bandMap, Palette palette, int maxCount)
         {
             DoubleComplexNumber center = (DoubleComplexNumber)set.Center;
-            DoubleComplexNumber size = (DoubleComplexNumber)set.Side;
-            double gapX = size.X / buffer.SizeX;
-            double gapY = size.Y / buffer.SizeY;
+            double size = set.Side;
+            double gapX = size / buffer.SizeX;
+            double gapY = size / buffer.SizeY;
             double gap = Math.Min(gapX, gapY);
 
             DoubleComplexNumber temp = new DoubleComplexNumber(0.0, 0.0);

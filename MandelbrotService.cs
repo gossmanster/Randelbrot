@@ -17,10 +17,12 @@ namespace Randelbrot
         {
             DoubleRenderer renderer = new DoubleRenderer();
             Palette palette = new DefaultPalette();
-            int maxCount = 1024;
+            int maxCount = set.EstimateMaxCount();
             var bandMap = new LogarithmicBandMap(maxCount);
 
             renderer.Render(buffer, set, bandMap, palette, maxCount);
         }
+
+
     }
 }
