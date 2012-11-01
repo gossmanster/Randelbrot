@@ -10,6 +10,8 @@ namespace Randelbrot
         public ContourRenderer() : base(null) { }
         public ContourRenderer(IRenderTracer tracer) : base(tracer) { }
 
+        public int NumberOfContours { get; private set; }
+
         private DoubleComplexNumber temp = new DoubleComplexNumber(0.0, 0.0);
 
         // We access these *a lot* and I don't completely trust the compiler 
@@ -162,6 +164,7 @@ namespace Randelbrot
             this.bandMap = bandMap;
             this.buffer = buffer;
             this.InitializeCoordinateMap(sizex, sizey, set);
+            this.NumberOfContours = 0;
 
             for (int i = 0; i < sizex; i++)
             {
@@ -190,6 +193,7 @@ namespace Randelbrot
                     {
                         if (this.Crawl(i, startOfBand, band))
                         {
+                            this.NumberOfContours = this.NumberOfContours + 1;
                             this.FillCrawl(i, startOfBand, band);
                         }
                         numberOfPointsFoundInBand = 0;

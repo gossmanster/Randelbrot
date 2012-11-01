@@ -40,6 +40,7 @@
     <Compile Include="BeautyEvaluator.cs" />
     <Compile Include="ComplexNumber.cs" />
     <Compile Include="ContourRenderer.cs" />
+    <Compile Include="Histogram.cs" />
     <Compile Include="IRenderTracer.cs" />
     <Compile Include="MandelbrotService.cs" />
     <Compile Include="MandelbrotSet.cs" />
