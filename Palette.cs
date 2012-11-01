@@ -45,14 +45,7 @@ namespace Randelbrot
             for (uint i = 0; i < numberColors; i++)
             {
                 green = 32 + (i % 220);
-                if ((i % 2) == 1)
-                {
-                    red = (i % 32) * 4 + 128;
-                }
-                else
-                {
-                    red = 0;
-                }
+                red = (i % 48) * 4 + 64;
                 blue = (i % 64) * 4;
 
                 unchecked

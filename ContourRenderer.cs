@@ -101,14 +101,16 @@ namespace Randelbrot
             int test = GetBand(x + inc, y);
 	        if ((test == 0) || (test == band))
 	        {
-           //     this.DumpBuffer("StartFillToOtherSideOfBand", this.buffer);
 		        temp = x+inc;
                 test = GetBand(temp, y);
 		        while((test == 0) || (test == band))
 		        {
 			        if (temp >= this.sizex) break;
 			        if (temp < 1) break;
-                    this.buffer.SetValue(temp, y, band);
+                    if (test == 0)
+                    {
+                        this.buffer.SetValue(temp, y, band);
+                    }
                     temp += inc;
                     test = GetBand(temp, y);
 		        }
