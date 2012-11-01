@@ -44,9 +44,11 @@ namespace Randelbrot
             uint red, blue, green;
             for (uint i = 0; i < numberColors; i++)
             {
-                green = 32 + (i % 220);
+                double radianNorm = 3.0 / numberColors;
+                double b = i * radianNorm;
+                blue = (uint)(Math.Abs(Math.Sin(b)) * 256.0);
                 red = (i % 48) * 4 + 64;
-                blue = (i % 64) * 4;
+                green = (i % 64) * 4;
 
                 unchecked
                 {
