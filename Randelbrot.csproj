@@ -36,7 +36,12 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BandMap.cs" />
+    <Compile Include="BeautyEvaluator.cs" />
     <Compile Include="ComplexNumber.cs" />
+    <Compile Include="ContourRenderer.cs" />
+    <Compile Include="IRenderTracer.cs" />
+    <Compile Include="MandelbrotService.cs" />
     <Compile Include="MandelbrotSet.cs" />
     <Compile Include="Palette.cs" />
     <Compile Include="PixelBuffer.cs" />
