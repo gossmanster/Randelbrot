@@ -5,51 +5,87 @@ using System.Text;
 
 namespace Randelbrot
 {
-    public class DoubleRenderer
+    public abstract class Renderer
     {
-        public DoubleRenderer() 
+        private IRenderTracer tracer = null;
+
+        public Renderer(IRenderTracer tracer)
         {
-            unchecked
-            {
-                this.black = (int)0xff000000;
-            }
+            this.tracer = tracer;
         }
 
-        int black;
+        abstract public void Render(PixelBuffer buffer, MandelbrotSet set, BandMap bandMap, int maxCount);
 
-        virtual public void Render(PixelBuffer buffer, MandelbrotSet set, BandMap bandMap, Palette palette, int maxCount)
-        {
-            DoubleComplexNumber center = (DoubleComplexNumber)set.Center;
-            double size = set.Side;
-            double gapX = size / buffer.SizeX;
-            double gapY = size / buffer.SizeY;
-            double gap = Math.Min(gapX, gapY);
-
-            DoubleComplexNumber temp = new DoubleComplexNumber(0.0, 0.0);
-            double startx = center.X - ((gap * buffer.SizeX) / 2.0);
-            double starty = center.Y - ((gap * buffer.SizeY) / 2.0);
-            temp.X = startx;
-            for (int i = 0; i < buffer.SizeX; i++)
-            {
-                temp.Y = starty;
-                for (int j = 0; j < buffer.SizeY; j++)
-                {
-                    int count = temp.CalculateCount(maxCount);
-                    this.SetColor(buffer, bandMap, palette, i, j, count, maxCount);
-                    temp.Y += gap;
-                }
-                temp.X += gap;
-            }
-        }
-
-
-        private void SetColor(PixelBuffer buffer, BandMap bandMap, Palette palette, int x, int y, int count, int maxCount)
+        protected virtual void SetBand(PixelBuffer buffer, BandMap bandMap, int x, int y, int count)
         {
             int band = bandMap.Map(count);
-            int color = palette.GetColor(band);
-            if (count == maxCount)
-                color = black;
-            buffer.SetValue(x, y, color);
+            buffer.SetValue(x, y, band);
+        }
+
+        protected double[] YCoordinates { get; private set; }
+        protected double[] XCoordinates { get; private set; }
+        protected virtual void InitializeCoordinateMap(int sizex, int sizey, MandelbrotSet set)
+        {
+            this.XCoordinates = new double[sizex];
+            this.YCoordinates = new double[sizey];
+
+            DoubleComplexNumber center = (DoubleComplexNumber)set.Center;
+            double size = set.Side;
+            double gapX = size / sizex;
+            double gapY = size / sizey;
+            double gap = Math.Min(gapX, gapY);
+
+            double x = center.X - ((gap * sizex) / 2.0);
+            double y = center.Y - ((gap * sizey) / 2.0);
+            for (int i = 0; i < sizex; i++)
+            {
+                this.XCoordinates[i] = x;
+                x += gap;
+            }
+            for (int i = 0; i < sizey; i++)
+            {
+                this.YCoordinates[i] = y;
+                y += gap;
+            }
+        }
+
+        [System.Diagnostics.ConditionalAttribute("DEBUG")]
+        public void DumpBuffer(string message, PixelBuffer buffer)
+        {
+            if (this.tracer != null)
+            {
+                this.tracer.DumpBits(message, buffer);
+            }
+        }
+    }
+
+    public class DoubleRenderer : Renderer
+    {
+        public DoubleRenderer() 
+            : base(null)
+        {
+        }
+
+        public DoubleRenderer(IRenderTracer tracer)
+            : base(tracer)
+        {
+        }
+
+        override public void Render(PixelBuffer buffer, MandelbrotSet set, BandMap bandMap, int maxCount)
+        {
+            this.InitializeCoordinateMap(buffer.SizeX, buffer.SizeY, set);
+
+            DoubleComplexNumber temp = new DoubleComplexNumber(0.0, 0.0);
+            for (int i = 0; i < buffer.SizeX; i++)
+            {
+                temp.X = this.XCoordinates[i];
+                for (int j = 0; j < buffer.SizeY; j++)
+                {
+                    temp.Y = this.YCoordinates[j];
+                    int count = temp.CalculateCount(maxCount);
+                    this.SetBand(buffer, bandMap, i, j, count);
+                }
+            }
         }
     }
 }

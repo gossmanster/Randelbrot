@@ -4,6 +4,9 @@
 namespace Randelbrot
 {
     // Used to combine bands of count, making for more pleasing pictures
+    // NOTE:  Points inside the set (maxcount) are set to band -1
+    // All other bands are mapped to the range 1 -> N
+    // 0 is the uninitialized value
     public class BandMap
     {
         protected int[] Values { get; private set; }
@@ -18,8 +21,8 @@ namespace Randelbrot
 
         public int Map(int count)
         {
-            if (count == this.MaxCount)
-                return this.MaxCount;
+            if (count >= this.MaxCount)
+                return -1;
             return this.Values[count];
         }
     }

@@ -20,7 +20,17 @@ namespace Randelbrot
 
         public int GetColor(int count)
         {
-            return this.Colors[count % this.ColorCount];
+            int entry = count % this.ColorCount;
+            return this.Colors[entry];
+        }
+
+        public virtual int GetMaxCountColor()
+        {
+            unchecked
+            {
+                // Opaque Black
+                return (int)(0xff000000);
+            }
         }
     }
 
@@ -35,7 +45,14 @@ namespace Randelbrot
             for (uint i = 0; i < numberColors; i++)
             {
                 green = 32 + (i % 220);
-                red = (i % 32) * 8;
+                if ((i % 2) == 1)
+                {
+                    red = (i % 32) * 4 + 128;
+                }
+                else
+                {
+                    red = 0;
+                }
                 blue = (i % 64) * 4;
 
                 unchecked
@@ -48,7 +65,5 @@ namespace Randelbrot
                 this.Colors[i] = color;
             }
         }
-
-
     }
 }

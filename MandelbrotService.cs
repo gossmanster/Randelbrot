@@ -9,20 +9,26 @@ namespace Randelbrot
 
     public class AdaptiveMandelbrotService : MandelbrotService
     {
+        private IRenderTracer tracer = null;
+
         public AdaptiveMandelbrotService()
         {
         }
 
+        public AdaptiveMandelbrotService(IRenderTracer tracer)
+        {
+            this.tracer = tracer;
+        }
+
         public override void RenderToBuffer(MandelbrotSet set, PixelBuffer buffer)
         {
-            DoubleRenderer renderer = new DoubleRenderer();
+            var renderer = new ContourRenderer(this.tracer);
             Palette palette = new DefaultPalette();
             int maxCount = set.EstimateMaxCount();
             var bandMap = new LogarithmicBandMap(maxCount);
 
-            renderer.Render(buffer, set, bandMap, palette, maxCount);
+            renderer.Render(buffer, set, bandMap, maxCount);
+            buffer.ApplyPalette(palette);
         }
-
-
     }
 }

@@ -39,6 +39,23 @@ namespace Randelbrot
         {
 
         }
+
+        public PixelBuffer Clone()
+        {
+            var newBuffer = new PixelBuffer(this.SizeX, this.SizeY);
+            for (int i = 0; i < pixels.Length; i++)
+                newBuffer.pixels[i] = this.pixels[i];
+            return newBuffer;
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                pixels[i] = 0;
+            }
+        }
+
         public int GetValue(int x, int y)
         {
             System.Diagnostics.Debug.Assert(x >= 0);
@@ -64,5 +81,18 @@ namespace Randelbrot
             return this.pixels;
         }
 
+        // Knowing about bands is a bit of policy leaking into this class...
+        // Should be factored in some helper class
+        public void ApplyPalette(Palette palette)
+        {
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                int band = this.pixels[i];
+                if (band == -1)
+                    this.pixels[i] = palette.GetMaxCountColor();
+                else
+                    this.pixels[i] = palette.GetColor(band);
+            }
+        }
     }
 }
