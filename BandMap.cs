@@ -27,6 +27,7 @@ namespace Randelbrot
         }
     }
 
+    // Combines bands logarithmically.  Seems to match the behavior of the set.
     public class LogarithmicBandMap : BandMap
     {
         // To combine more bands, decrease this factor
