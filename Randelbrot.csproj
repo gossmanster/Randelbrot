@@ -33,12 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ClassDiagram3.cd" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="AutoBrotService.cs" />
     <Compile Include="BandMap.cs" />
     <Compile Include="BeautyEvaluator.cs" />

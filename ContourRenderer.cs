@@ -201,7 +201,6 @@ namespace Randelbrot
                     }
                 }
             }
-
         }
     }
 }

@@ -68,6 +68,15 @@ namespace Randelbrot
             this.candidates.Push(newCandidates);
         }
 
+        public MandelbrotSet PopAndGenerate()
+        {
+            var newCandidates = this.generateCandidates(this.candidates.Peek());
+            var retval = this.candidates.Pop();
+            this.candidates.Push(newCandidates);
+
+            return retval;
+        }
+
         public int Count
         {
             get
