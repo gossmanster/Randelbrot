@@ -15,7 +15,7 @@ namespace Randelbrot
         private ContourRenderer ContourRenderer { get; set; }
         private PixelBuffer Buffer { get; set; }
         private BandMap BandMap { get; set; }
-        private int size = 50;
+        private int size = 90;
         public DefaultBeautyEvaluator()
         {
             this.ContourRenderer = new ContourRenderer();
@@ -34,14 +34,19 @@ namespace Randelbrot
             var histogram = new Histogram();
             histogram.Evaluate(this.Buffer);
             int pointsInSet = histogram.GetValue(-1);
+
             if (pointsInSet > 0)
             {
                 retval *= 1.6;
-                if (pointsInSet < (0.3 * size * size))
-                {
-                    retval *= 1.6;
-                }
+
+                double r = ((double)(size * size) / pointsInSet) / 500;
+                retval += r;
             }
+
+            retval *= 6;
+            retval += histogram.NumberOfValues;
+
+            retval -= set.EstimateMaxCount() / 100;
 
             return retval;
         }

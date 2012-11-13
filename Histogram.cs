@@ -34,5 +34,13 @@ namespace Randelbrot
             this.values.TryGetValue(val, out retval);
             return retval;
         }
+
+        public int NumberOfValues
+        {
+            get
+            {
+                return this.values.Count;
+            }
+        }
     }
 }

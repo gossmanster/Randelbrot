@@ -58,7 +58,8 @@ namespace Randelbrot
 	        {
                 if (this.GetOrCalculateBand(x + xinc, y, out calculated) != band)
                 {
-                    crawled = true;
+                    if (calculated)
+                        crawled = true;
                     yinc = xinc;
                 }
                 else
@@ -69,7 +70,8 @@ namespace Randelbrot
                 }
                 if (this.GetOrCalculateBand(x, y + yinc, out calculated) != band)
                 {
-                    crawled = true;
+                    if (calculated)
+                        crawled = true;
                     xinc = -1 * yinc;
                 }
                 else
@@ -189,7 +191,7 @@ namespace Randelbrot
                         numberOfPointsFoundInBand = 1;
                     }
                     // If we are 4 or more pixels into the band, start crawling
-                    if (numberOfPointsFoundInBand > 4)
+                    if (numberOfPointsFoundInBand > 8)
                     {
                         if (this.Crawl(i, startOfBand, band))
                         {

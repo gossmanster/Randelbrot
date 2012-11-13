@@ -7,7 +7,7 @@ namespace Randelbrot
 {
     public class AutoBrotService
     {
-        private PriorityList<MandelbrotSet> candidates;
+        private PriorityQueue<MandelbrotSet> candidates;
         private BeautyEvaluator evaluator;
         private Random random = new Random();
 
@@ -15,7 +15,7 @@ namespace Randelbrot
         public AutoBrotService(MandelbrotSet startSet, BeautyEvaluator evaluator)
         {
             this.evaluator = evaluator;
-            this.candidates = new PriorityList<MandelbrotSet>(1000, evaluator.Evaluate);
+            this.candidates = new PriorityQueue<MandelbrotSet>(1000, evaluator.Evaluate);
             this.candidates.Push(startSet);
         }
 
@@ -32,11 +32,11 @@ namespace Randelbrot
         {
             var retval = new List<MandelbrotSet>(10);
 
-            var newSet = new MandelbrotSet(set.Center, set.Side / 2);
+  /*          var newSet = new MandelbrotSet(set.Center, set.Side / 2);
             retval.Add(newSet);
             newSet = new MandelbrotSet(set.Center, set.Side * 0.7);
-            retval.Add(newSet);
-            newSet = new MandelbrotSet(new DoubleComplexNumber(set.Center.X - set.Side / 4, set.Center.Y - set.Side / 4), set.Side / 2);
+            retval.Add(newSet); */
+            var newSet = new MandelbrotSet(new DoubleComplexNumber(set.Center.X - set.Side / 4, set.Center.Y - set.Side / 4), set.Side / 2);
             retval.Add(newSet);
             newSet = new MandelbrotSet(new DoubleComplexNumber(set.Center.X + set.Side / 4, set.Center.Y - set.Side / 4), set.Side / 2);
             retval.Add(newSet);
@@ -45,7 +45,7 @@ namespace Randelbrot
             newSet = new MandelbrotSet(new DoubleComplexNumber(set.Center.X + set.Side / 4, set.Center.Y + set.Side / 4), set.Side / 2);
             retval.Add(newSet);
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 15; i++)
             {
                 retval.Add(this.randomChild(set));
             }
@@ -75,6 +75,11 @@ namespace Randelbrot
             this.candidates.Push(newCandidates);
 
             return retval;
+        }
+
+        public double PeekEvaluation()
+        {
+            return this.candidates.PeekEvaluation();
         }
 
         public int Count

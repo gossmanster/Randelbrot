@@ -18,7 +18,7 @@ namespace Randelbrot
         public int EstimateMaxCount()
         {
             double temp = Math.Log(1.0 / Side);
-            temp *= temp * 40;
+            temp *= temp * 60;
             return (int)temp + 400;
         }
     }

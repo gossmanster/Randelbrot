@@ -105,6 +105,14 @@ namespace Randelbrot
             this.FloatUp(this.theHeap.Count - 1);
         }
 
+        public void Push(List<T> elements)
+        {
+            foreach (T t in elements)
+            {
+                this.Push(t);
+            }
+        }
+
         public T Pop()
         {
             T retval = this.theHeap[1].element;
@@ -116,6 +124,16 @@ namespace Randelbrot
                 this.SinkDown(1);
             }
             return retval;
+        }
+
+        public T Peek()
+        {
+            return this.theHeap[1].element;
+        }
+
+        public double PeekEvaluation()
+        {
+            return this.theHeap[1].evaluationValue;
         }
 
         public bool IsEmpty()
@@ -136,39 +154,26 @@ namespace Randelbrot
                 this.theHeap = newPQ.theHeap;
             }
         }
-    }
 
-#if DEBUG
-    public class PriorityQueueTests
-    {
-        private double Evaluate(double d)
+        public int Count
         {
-            return d;
-        }
-
-        public void Test1()
-        {
-            var pq = new PriorityQueue<double>(10, this.Evaluate);
-            var random = new Random();
-            for (int i = 1; i < 20; i++)
+            get
             {
-                double v = random.NextDouble();
-                pq.Push(v);
-            }
-            pq.TrimExcess();
-            while (!pq.IsEmpty())
-            {
-                double d = pq.Pop();
-                System.Diagnostics.Debug.WriteLine(d.ToString());
+                return this.theHeap.Count - 1;
             }
         }
 
-        public static void RunTests()
+        public T this[int i]
         {
-            var thisPtr = new PriorityQueueTests();
-            thisPtr.Test1();
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
+        public double Evaluation(int i)
+        {
+            throw new NotImplementedException();
+        }
     }
-#endif
 }

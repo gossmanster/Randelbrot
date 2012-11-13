@@ -52,6 +52,11 @@ namespace Randelbrot
             return this.list[this.list.Count - 1].Item2;
         }
 
+        public double PeekEvaluation()
+        {
+            return this.list[this.list.Count - 1].Item1;
+        }
+
         public int Count
         {
             get
