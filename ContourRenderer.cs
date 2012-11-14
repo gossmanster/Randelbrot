@@ -191,7 +191,7 @@ namespace Randelbrot
                         numberOfPointsFoundInBand = 1;
                     }
                     // If we are 4 or more pixels into the band, start crawling
-                    if (numberOfPointsFoundInBand > 8)
+                    if (numberOfPointsFoundInBand > 4)
                     {
                         if (this.Crawl(i, startOfBand, band))
                         {

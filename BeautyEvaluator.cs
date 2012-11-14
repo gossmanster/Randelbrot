@@ -15,7 +15,7 @@ namespace Randelbrot
         private ContourRenderer ContourRenderer { get; set; }
         private PixelBuffer Buffer { get; set; }
         private BandMap BandMap { get; set; }
-        private int size = 90;
+        private int size = 60;
         public DefaultBeautyEvaluator()
         {
             this.ContourRenderer = new ContourRenderer();
@@ -29,24 +29,30 @@ namespace Randelbrot
             this.Buffer.Clear();
             this.ContourRenderer.Render(this.Buffer, set, bandMap, set.EstimateMaxCount());
 
+            // The more contours, the more interesting
             retval = this.ContourRenderer.NumberOfContours;
 
             var histogram = new Histogram();
             histogram.Evaluate(this.Buffer);
             int pointsInSet = histogram.GetValue(-1);
 
+            // If at least some points in the set appear, it is more interesting
             if (pointsInSet > 0)
             {
                 retval *= 1.6;
 
-                double r = ((double)(size * size) / pointsInSet) / 500;
+                // Reduce the interest if there are too many points in the set
+                double r = ((double)(size * size) / pointsInSet) / 600;
                 retval += r;
             }
 
-            retval *= 6;
-            retval += histogram.NumberOfValues;
+            // The more different colors the more interesting.  Scaled so we don't get too complex.
+            // Use negative to make more colors less interesting, thus reducing noisy areas
+             retval += histogram.NumberOfValues / 9.0;
 
-            retval -= set.EstimateMaxCount() / 100;
+            // All else being equal, favor pictures of lower estimated count and thus speed
+            // This is also a zoom avoidance feature
+            retval -= set.EstimateMaxCount() / 30;
 
             return retval;
         }

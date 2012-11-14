@@ -98,11 +98,16 @@ namespace Randelbrot
             }
         }
 
+        private void PushItem(PriorityQueueItem<T> item)
+        {
+            this.theHeap.Add(item);
+            this.FloatUp(this.theHeap.Count - 1);
+        }
+
         public void Push(T element)
         {
             var item = new PriorityQueueItem<T>(element, this.evaluator(element));
-            this.theHeap.Add(item);
-            this.FloatUp(this.theHeap.Count - 1);
+            this.PushItem(item);
         }
 
         public void Push(List<T> elements)
@@ -113,9 +118,9 @@ namespace Randelbrot
             }
         }
 
-        public T Pop()
+        private PriorityQueueItem<T> PopItem()
         {
-            T retval = this.theHeap[1].element;
+            var retval = this.theHeap[1];
             var last = this.theHeap[this.theHeap.Count - 1];
             this.theHeap.RemoveAt(this.theHeap.Count - 1);
             if (this.theHeap.Count > 1)
@@ -123,6 +128,12 @@ namespace Randelbrot
                 this.theHeap[1] = last;
                 this.SinkDown(1);
             }
+            return retval;
+        }
+
+        public T Pop()
+        {
+            T retval = PopItem().element;
             return retval;
         }
 
@@ -144,12 +155,12 @@ namespace Randelbrot
 
         public void TrimExcess()
         {
-            if (this.theHeap.Count + 1 > this.size)
+            if (this.theHeap.Count + 1 > 2 * this.size)
             {
                 var newPQ = new PriorityQueue<T>(this.size, this.evaluator);
                 for (int i = 0; i < this.size; i++)
                 {
-                    newPQ.Push(this.Pop());
+                    newPQ.PushItem(this.PopItem());
                 }
                 this.theHeap = newPQ.theHeap;
             }
