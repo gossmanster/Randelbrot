@@ -15,7 +15,7 @@ namespace Randelbrot
         private ContourRenderer ContourRenderer { get; set; }
         private PixelBuffer Buffer { get; set; }
         private BandMap BandMap { get; set; }
-        private int size = 60;
+        private int size = 80;
         public DefaultBeautyEvaluator()
         {
             this.ContourRenderer = new ContourRenderer();
@@ -39,10 +39,11 @@ namespace Randelbrot
             // If at least some points in the set appear, it is more interesting
             if (pointsInSet > 0)
             {
+
                 retval *= 1.6;
 
                 // Reduce the interest if there are too many points in the set
-                double r = ((double)(size * size) / pointsInSet) / 600;
+                double r = ((double)(size * size) / pointsInSet) / 100;
                 retval += r;
             }
 
@@ -52,8 +53,12 @@ namespace Randelbrot
 
             // All else being equal, favor pictures of lower estimated count and thus speed
             // This is also a zoom avoidance feature
-            retval -= set.EstimateMaxCount() / 30;
+            retval -= set.EstimateMaxCount() / 100;
 
+            if (pointsInSet > 6300)
+            {
+                pointsInSet++;
+            }
             return retval;
         }
     }

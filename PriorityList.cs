@@ -77,5 +77,9 @@ namespace Randelbrot
         {
             return this.list[this.list.Count - 1 - i].Item1;
         }
+
+        public void TrimExcess()
+        {
+        }
     }
 }
