@@ -48,6 +48,7 @@ namespace Randelbrot
 
         private bool Crawl(int firstX, int firstY, int band)
         {
+            this.SaveBits("StartCrawl", this.buffer);
             bool crawled = false;
 	        int x,y,xinc,yinc;
             bool done = false;
@@ -81,7 +82,7 @@ namespace Randelbrot
                     done = ((firstX == x) && (firstY == y));
                 }
 	        }
-            return crawled;
+            return true;
         }
 
 
@@ -94,7 +95,6 @@ namespace Randelbrot
                 return 0;
             }
             int band = this.buffer.GetValue(x, y);
-
             return band;
         }
 
@@ -107,10 +107,11 @@ namespace Randelbrot
 	        {
 		        temp = x+inc;
                 test = GetBand(temp, y);
-		        while((test == 0) || (test == band))
+		        while((test == 0))
 		        {
+          
 			        if (temp >= this.sizex) break;
-			        if (temp < 1) break;
+			        if (temp < 0) break;
                     if (test == 0)
                     {
                         this.buffer.SetValue(temp, y, band);
@@ -123,7 +124,8 @@ namespace Randelbrot
 
         private void FillCrawl(int firstX, int firstY, int band)
         {
-            this.DumpBuffer("StartFillCrawl", this.buffer);
+            this.SaveBits("StartFillCrawl", this.buffer);
+
             int x, y, xinc, yinc;
             bool done = false;
             xinc = 1;
@@ -131,31 +133,40 @@ namespace Randelbrot
             while (!done)
             {
                 if (this.GetBand(x + xinc, y) != band)
+                {
                     yinc = xinc;
+                }
                 else
                 {
                     yinc = -1 * xinc;
+                    x += xinc;
+                    done = ((firstX == x) && (firstY == y));
                     if (yinc < 0)
                         this.FillToOtherSideOfBand(x, y, 1, band);
                     else
                         this.FillToOtherSideOfBand(x, y, -1, band);
-                    x += xinc;
-                    done = ((firstX == x) && (firstY == y));
+
+                }
+                if (done)
+                {
+                    break;
                 }
                 if (this.GetBand(x, y + yinc) != band)
+                {
                     xinc = -1 * yinc;
+                }
                 else
                 {
                     xinc = yinc;
                     y += yinc;
+                    done = ((firstX == x) && (firstY == y));
                     if (yinc < 0)
                         this.FillToOtherSideOfBand(x, y, 1, band);
                     else
                         this.FillToOtherSideOfBand(x, y, -1, band);
-                    done = ((firstX == x) && (firstY == y));
                 }
             }
-            this.DumpBuffer("EndFillCrawl", this.buffer);
+            this.SaveBits("EndFillCrawl", this.buffer);
         }
 
         public override void Render(PixelBuffer buffer, MandelbrotSet set, BandMap bandMap, int maxCount)
@@ -186,20 +197,25 @@ namespace Randelbrot
                     }
                     else
                     {
-                        startOfBand = j;
-                        lastBand = band;
+                        if (band != lastBand)
+                        {
+                            startOfBand = j;
+                            lastBand = band;
+                        }
                         numberOfPointsFoundInBand = 1;
                     }
-                    // If we are 4 or more pixels into the band, start crawling
-                    if (numberOfPointsFoundInBand > 5)
+                    // If we are 8 or more pixels into the band, start crawling
+                    if (numberOfPointsFoundInBand > 8)
                     {
                         if (this.Crawl(i, startOfBand, band))
                         {
                             this.NumberOfContours = this.NumberOfContours + 1;
                             this.FillCrawl(i, startOfBand, band);
+                            this.DumpBits();
                         }
+                        this.ClearSavedBits();
+ 
                         numberOfPointsFoundInBand = 0;
-                        startOfBand = j + 1;
                     }
                 }
             }

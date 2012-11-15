@@ -15,7 +15,7 @@ namespace Randelbrot
         private ContourRenderer ContourRenderer { get; set; }
         private PixelBuffer Buffer { get; set; }
         private BandMap BandMap { get; set; }
-        private int size = 80;
+        private int size = 50;
         public DefaultBeautyEvaluator()
         {
             this.ContourRenderer = new ContourRenderer();
@@ -24,7 +24,9 @@ namespace Randelbrot
         public override double Evaluate(MandelbrotSet set)
         {
             double retval = 0.0;
-            var bandMap = new LogarithmicBandMap(set.EstimateMaxCount());
+
+            // Use logarithmic band map but combine fewer bands than we will in full rendering
+            var bandMap = new LogarithmicBandMap(set.EstimateMaxCount(), 55.0);
 
             this.Buffer.Clear();
             this.ContourRenderer.Render(this.Buffer, set, bandMap, set.EstimateMaxCount());
@@ -39,7 +41,8 @@ namespace Randelbrot
             // If at least some points in the set appear, it is more interesting
             if (pointsInSet > 0)
             {
-
+                if ((pointsInSet == (size * size)))
+                    return Double.NegativeInfinity;
                 retval *= 1.6;
 
                 // Reduce the interest if there are too many points in the set
@@ -49,16 +52,13 @@ namespace Randelbrot
 
             // The more different colors the more interesting.  Scaled so we don't get too complex.
             // Use negative to make more colors less interesting, thus reducing noisy areas
-             retval += histogram.NumberOfValues / 9.0;
+             retval += histogram.NumberOfValues / 1.0;
 
             // All else being equal, favor pictures of lower estimated count and thus speed
             // This is also a zoom avoidance feature
-            retval -= set.EstimateMaxCount() / 100;
+         //   retval -= set.EstimateMaxCount() / 200;
 
-            if (pointsInSet > 6300)
-            {
-                pointsInSet++;
-            }
+
             return retval;
         }
     }

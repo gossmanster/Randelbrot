@@ -50,11 +50,29 @@ namespace Randelbrot
         }
 
         [System.Diagnostics.ConditionalAttribute("DEBUG")]
-        public void DumpBuffer(string message, PixelBuffer buffer)
+        public void SaveBits(string message, PixelBuffer buffer)
         {
             if (this.tracer != null)
             {
-                this.tracer.DumpBits(message, buffer);
+                this.tracer.AddBits(message, buffer);
+            }
+        }
+
+        [System.Diagnostics.ConditionalAttribute("DEBUG")]
+        public void DumpBits()
+        {
+            if (this.tracer != null)
+            {
+                this.tracer.Dump();
+            }
+        }
+
+        [System.Diagnostics.ConditionalAttribute("DEBUG")]
+        public void ClearSavedBits()
+        {
+            if (this.tracer != null)
+            {
+                this.tracer.Clear();
             }
         }
     }

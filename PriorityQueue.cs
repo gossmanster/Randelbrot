@@ -106,8 +106,12 @@ namespace Randelbrot
 
         public void Push(T element)
         {
-            var item = new PriorityQueueItem<T>(element, this.evaluator(element));
-            this.PushItem(item);
+            double evaluation = this.evaluator(element);
+            if (evaluation > Double.NegativeInfinity)
+            {
+                var item = new PriorityQueueItem<T>(element, evaluation);
+                this.PushItem(item);
+            }
         }
 
         public void Push(List<T> elements)

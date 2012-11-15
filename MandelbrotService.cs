@@ -25,7 +25,7 @@ namespace Randelbrot
             var renderer = new ContourRenderer(this.tracer);
             Palette palette = new DefaultPalette();
             int maxCount = set.EstimateMaxCount();
-            var bandMap = new LogarithmicBandMap(maxCount);
+            var bandMap = new LogarithmicBandMap(maxCount, 30.0);
 
             renderer.Render(buffer, set, bandMap, maxCount);
             buffer.ApplyPalette(palette);

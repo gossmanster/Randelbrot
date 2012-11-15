@@ -31,12 +31,13 @@ namespace Randelbrot
     public class LogarithmicBandMap : BandMap
     {
         // To combine more bands, decrease this factor
-        const double combinationFactor = 40.0;
+        private double combinationFactor = 35.0;
 
 
-        public LogarithmicBandMap(int maxCount)
+        public LogarithmicBandMap(int maxCount, double combinationFactor = 35.0)
             : base(maxCount)
         {
+            this.combinationFactor = combinationFactor;
             // Combine bands logarithmically
             for (int i = 0; i < maxCount; i++)
             {

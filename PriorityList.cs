@@ -27,8 +27,12 @@ namespace Randelbrot
 
         public void Push(T element)
         {
-            this.list.Add(new Tuple<double, T>(this.evaluator(element), element));
-            this.Sort();
+            double evaluation = this.evaluator(element);
+            if (evaluation > double.NegativeInfinity)
+            {
+                this.list.Add(new Tuple<double, T>(evaluation, element));
+                this.Sort();
+            }
         }
 
         public void Push(List<T> elements)
