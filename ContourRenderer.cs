@@ -48,7 +48,7 @@ namespace Randelbrot
 
         private bool Crawl(int firstX, int firstY, int band)
         {
-            this.SaveBits("StartCrawl", this.buffer);
+//            this.SaveBits("StartCrawl", this.buffer);
             bool crawled = false;
 	        int x,y,xinc,yinc;
             bool done = false;
@@ -124,7 +124,7 @@ namespace Randelbrot
 
         private void FillCrawl(int firstX, int firstY, int band)
         {
-            this.SaveBits("StartFillCrawl", this.buffer);
+//            this.SaveBits("StartFillCrawl", this.buffer);
 
             int x, y, xinc, yinc;
             bool done = false;
@@ -141,9 +141,7 @@ namespace Randelbrot
                     yinc = -1 * xinc;
                     x += xinc;
                     done = ((firstX == x) && (firstY == y));
-                    if (yinc < 0)
-                        this.FillToOtherSideOfBand(x, y, 1, band);
-                    else
+                    if (yinc > 0)
                         this.FillToOtherSideOfBand(x, y, -1, band);
 
                 }
@@ -160,9 +158,7 @@ namespace Randelbrot
                     xinc = yinc;
                     y += yinc;
                     done = ((firstX == x) && (firstY == y));
-                    if (yinc < 0)
-                        this.FillToOtherSideOfBand(x, y, 1, band);
-                    else
+                    if (yinc > 0)
                         this.FillToOtherSideOfBand(x, y, -1, band);
                 }
             }
