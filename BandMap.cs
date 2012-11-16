@@ -34,7 +34,7 @@ namespace Randelbrot
         private double combinationFactor = 35.0;
 
 
-        public LogarithmicBandMap(int maxCount, double combinationFactor = 35.0)
+        public LogarithmicBandMap(int maxCount, double combinationFactor = 32.0)
             : base(maxCount)
         {
             this.combinationFactor = combinationFactor;
